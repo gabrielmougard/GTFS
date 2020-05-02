@@ -68,8 +68,10 @@ public class GTFSGraphTest {
 		}
 		
 		List<GTFSVertex> res = new ArrayList<GTFSVertex>();
+		int count = 0;
 		for (List<String> data : verticesData) {
-			res.add(new GTFSVertex(data));
+			res.add(new GTFSVertex(count, data));
+			count++;
 		}
 		return res;
 	}

@@ -10,6 +10,10 @@ public class GTFSGraph<GTFSVertex> implements Graph<GTFSVertex> {
         verticesMap = new HashMap<>();
     }
     
+    public Map<GTFSVertex, Set<GTFSVertex>> getVerticesMap() {
+    	return this.verticesMap;
+    }
+    
     public int getNumVertices() {
         return verticesMap.size();
     }

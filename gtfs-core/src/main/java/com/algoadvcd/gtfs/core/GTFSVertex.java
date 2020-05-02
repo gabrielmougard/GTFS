@@ -5,16 +5,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class GTFSVertex implements Comparable<GTFSVertex>{
-	String vertexId;
+	int vertexId;
 	List<String> data;
 	
-	public GTFSVertex() {
-		vertexId = UUID.randomUUID().toString();
+	public GTFSVertex(int vertexId) {
+		this.vertexId = vertexId;
 		data = new ArrayList<String>();
 	}
 	
-	public GTFSVertex(List<String> data) {
-		vertexId = UUID.randomUUID().toString();
+	public GTFSVertex(int vertexId, List<String> data) {
+		this.vertexId = vertexId;
 		this.data = data;
 	}
 	
@@ -37,6 +37,13 @@ public class GTFSVertex implements Comparable<GTFSVertex>{
 	@Override
 	public String toString() {
 		return "GTFSVertex : {\n\t vertexId : "+vertexId+"\n\t data : "+data+"\n}\n";
+	}
+	
+	public boolean equals(GTFSVertex v) {
+		if (v.vertexId == this.vertexId) {
+			return true;
+		}
+		return false;
 	}
 	
 }

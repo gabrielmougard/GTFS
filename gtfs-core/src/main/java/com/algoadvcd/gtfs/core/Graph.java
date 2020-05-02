@@ -5,6 +5,7 @@ import java.util.function.*;
 
 public interface Graph<V> extends Iterable<V> {
 
+	public Map<V, Set<V>> getVerticesMap();
 	public int getNumVertices();
 	public int getNumEdges();
 	public int degree(V v);
