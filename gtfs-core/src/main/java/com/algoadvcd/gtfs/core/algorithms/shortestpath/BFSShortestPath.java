@@ -42,7 +42,7 @@ public class BFSShortestPath<GTFSVertex> {
 						queue.add(nextVertex);
 						visitedVertices.add(nextVertex);
 						
-						//Look up of next vertext instead of previous
+						//Look up of next vertex instead of previous
 						nextVertexMap.put(currentVertex,  nextVertex);
 						previousVertex = currentVertex;
 					}
