@@ -36,7 +36,7 @@ public class GTFSVertex implements Comparable<GTFSVertex>{
 	
 	@Override
 	public String toString() {
-		return "GTFSVertex : {\n\t vertexId : "+vertexId+"\n\t data : "+data+"\n}\n";
+		return "GTFSVertex : {\n\t vertexId : "+vertexId+"\n\t data : "+data+"\n}";
 	}
 	
 	public boolean equals(GTFSVertex v) {

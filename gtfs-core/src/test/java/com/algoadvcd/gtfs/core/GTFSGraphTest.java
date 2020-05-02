@@ -31,6 +31,8 @@ public class GTFSGraphTest {
 				g.addEdge(v, w);
 			}
 		}
+		
+		System.out.println(g.toString());
 	}
 	
 	private String randomString() {
@@ -56,7 +58,7 @@ public class GTFSGraphTest {
 	
 	private List<GTFSVertex> generateRandomGTFSVertices() {
 		SecureRandom random = new SecureRandom();
-		int nbVertices = random.nextInt(100) + 4; //minimum 4 vertices
+		int nbVertices = random.nextInt(10) + 4; //minimum 4 vertices
 		int nbDataFields = random.nextInt(10) + 2; //minimum 2 data fields
 		List<List<String>> verticesData = new ArrayList<List<String>>();
 		for (int i = 0; i < nbVertices; i++) {

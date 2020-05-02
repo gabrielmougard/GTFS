@@ -23,6 +23,10 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.0-jre'
+    
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
