@@ -4,7 +4,8 @@ import tech.tablesaw.api.Table;
 
 public interface GTFSFeed {
 	
-	public Table get(String filename);
-	public void set(String filename, Table dataframe);
+	public Table get(String tablename);
+	
+	public void fetch();
 	
 }

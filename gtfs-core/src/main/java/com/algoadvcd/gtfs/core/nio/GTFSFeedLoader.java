@@ -14,9 +14,10 @@ public class GTFSFeedLoader {
 	public GTFSFeed getFeed() {
 		if (target == Target.LOCAL) {
 			GTFSFeed feed = new LocalGTFSFeed(datasetname);
+			feed.fetch();
 			return feed;
 		} else {
-			GTFSFeed feed = new RemoteGTFSFeed(datasetname);
+			GTFSFeed feed = new RemoteGTFSFeed(datasetname).fetch();
 		}
 	}
 	public static class GTFSFeedLoaderBuilder {
