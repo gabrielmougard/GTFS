@@ -14,6 +14,7 @@ import org.jgrapht.Graph;
 import com.algoadvcd.gtfs.core.nio.config.GTFSFeedConfigEdge;
 import com.algoadvcd.gtfs.core.nio.config.GTFSFeedConfigVertex;
 import com.algoadvcd.gtfs.core.nio.config.GTFSFeedGraphConfig;
+import com.algoadvcd.gtfs.core.util.Tuple;
 
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
@@ -72,9 +73,8 @@ public class LocalGTFSFeed implements GTFSFeed {
 					new ComputeFeedTask
 					(
 							key, 
-							gtfsTables.get(key), 
 							this.gtfsTablesLock, 
-							this.config
+							this.gtfsTables
 					);
 			logger.info("ComputeFeedTask created for : "+key);
 			executor.execute(task);
@@ -90,6 +90,47 @@ public class LocalGTFSFeed implements GTFSFeed {
 	        executor.shutdownNow();
 	    }
 		
+		//pruning tables in order to keep only the data that we really need
+		for (String k: this.gtfsTables.keySet()) {
+			prune(this.gtfsTables.get(k));
+		}
+		
+	}
+	
+	private void prune(Table originTable) {
+		/*
+		 * Depth-first search through the dependency graph
+		 * and prune dependent Table along the way
+		 */
+		
+		//1) find the vertex associated with the table t in the dependency graph
+		Set<GTFSFeedConfigVertex> vertices = this.config.vertexSet();
+		GTFSFeedConfigVertex tableVertex = null;
+		for (GTFSFeedConfigVertex v : vertices) {
+			if (v.getFilename() == originTable.name()) {
+				tableVertex = v;
+			}
+		}
+		
+		//2) get the neighbors edges of this vertex
+		List<Tuple<GTFSFeedConfigVertex,List<Map<String, String>>>> dependenciesList = new ArrayList<Tuple<GTFSFeedConfigVertex,List<Map<String, String>>>>();
+		Set<GTFSFeedConfigEdge> adjacentEdges = this.config.edgesOf(tableVertex);
+		
+		for (GTFSFeedConfigEdge e : adjacentEdges) {
+			List<Map<String, String>> dep = e.getDependencies();
+			Tuple<GTFSFeedConfigVertex,List<Map<String, String>>> tuple = new Tuple<GTFSFeedConfigVertex,List<Map<String, String>>>(e.getTarget(), dep);
+			dependenciesList.add(tuple);
+		}
+		
+		for (Tuple<GTFSFeedConfigVertex,List<Map<String, String>>> tup : dependenciesList) {
+			GTFSFeedConfigVertex target = tup.first;
+			String targetName = target.getFilename().split(".")[0];
+			Table depdf = this.gtfsTables.get(targetName);
+			for (Map<String, String> deps : tup.second) {
+				//TODO : finish this 
+			}
+		}
+		
 	}
 	
 	public Table get(String tablename) {
@@ -98,15 +139,13 @@ public class LocalGTFSFeed implements GTFSFeed {
 	
 	class ComputeFeedTask implements Runnable {
 		private String tablename;
-		private Table gtfsTable;
 		private Lock gtfsTablesLock;
-		private Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> config;
+		private Map<String, Table> gtfsTables;
 		
-		public ComputeFeedTask(String tablename, Table gtfsTable, Lock gtfsTablesLock, Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> config) {
+		public ComputeFeedTask(String tablename, Lock gtfsTablesLock, Map<String, Table> gtfsTables) {
 			this.tablename = tablename;
-			this.gtfsTable = gtfsTable;
 			this.gtfsTablesLock = gtfsTablesLock;
-			this.config = config;
+			this.gtfsTables = gtfsTables;
 		}
 		
 		public void run() {
@@ -119,32 +158,23 @@ public class LocalGTFSFeed implements GTFSFeed {
 				Table t = Table.read().csv(fileStream, this.tablename);
 				
 				//1) prune table to keep only the data that we want to use
-				t = prune(t);
+				//t = prune(t);
 				//2) lock gtfsTable, update gtfsTable, unlock gtfsTable
+				gtfsTablesLock.lock(); 
+		        
+				try { 
+		            //update the list of table (which was an empty table before)
+		            this.gtfsTables.put(this.tablename, t);
+		        } catch(Exception e) { 
+		            e.printStackTrace(); 
+		        } finally { 
+		        	gtfsTablesLock.unlock(); 
+		        } 
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		
-		private Table prune(Table t) {
-			/*
-			 * Depth-first search through the dependency graph
-			 * and prune dependent Table along the way
-			 */
-		
-			//1) find the vertex associated with the table t in the dependency graph
-			
-			//2) get the neighbors edges of this vertex
-			
-			//3) iterate through the edges found 
-				
-				//3.1) get the "dependencies" of the edge.
-			
-				//3.2
-			
-		}
+		}	
 	}
-	
 }

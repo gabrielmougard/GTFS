@@ -10,4 +10,20 @@ public class GTFSFeedConfigEdge extends DefaultEdge {
 	public GTFSFeedConfigEdge(List<Map<String, String>> dependencies) {
 		this.dependencies = dependencies;
 	}
+	
+	public List<Map<String, String>> getDependencies() {
+		return this.dependencies;
+	}
+	
+	@Override
+	public GTFSFeedConfigVertex getSource() {
+		return getSource(); 
+	}
+	
+	@Override
+	public GTFSFeedConfigVertex getTarget() {
+		return getTarget(); 
+	}
+	
+	
 }
