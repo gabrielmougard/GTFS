@@ -1,5 +1,7 @@
 package com.algoadvcd.gtfs.core.nio;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -13,6 +15,7 @@ import com.algoadvcd.gtfs.core.nio.config.GTFSFeedConfigEdge;
 import com.algoadvcd.gtfs.core.nio.config.GTFSFeedConfigVertex;
 import com.algoadvcd.gtfs.core.nio.config.GTFSFeedGraphConfig;
 
+import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 
 import org.apache.logging.log4j.LogManager;
@@ -65,7 +68,14 @@ public class LocalGTFSFeed implements GTFSFeed {
 		// call concurrent code for updating gtfsTables
 		ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(this.gtfsTables.size());
 		for (String key : gtfsTables.keySet()) {
-			ComputeFeedTask task = new ComputeFeedTask(key, gtfsTables.get(key), this.gtfsTablesLock);
+			ComputeFeedTask task = 
+					new ComputeFeedTask
+					(
+							key, 
+							gtfsTables.get(key), 
+							this.gtfsTablesLock, 
+							this.config
+					);
 			logger.info("ComputeFeedTask created for : "+key);
 			executor.execute(task);
 		}
@@ -90,14 +100,49 @@ public class LocalGTFSFeed implements GTFSFeed {
 		private String tablename;
 		private Table gtfsTable;
 		private Lock gtfsTablesLock;
+		private Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> config;
 		
-		public ComputeFeedTask(String tablename, Table gtfsTable, Lock gtfsTablesLock) {
+		public ComputeFeedTask(String tablename, Table gtfsTable, Lock gtfsTablesLock, Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> config) {
 			this.tablename = tablename;
 			this.gtfsTable = gtfsTable;
 			this.gtfsTablesLock = gtfsTablesLock;
+			this.config = config;
 		}
 		
 		public void run() {
+			InputStream fileStream = 
+					getClass()
+					.getClassLoader()
+					.getResourceAsStream(this.tablename+".txt");
+			
+			try {
+				Table t = Table.read().csv(fileStream, this.tablename);
+				
+				//1) prune table to keep only the data that we want to use
+				t = prune(t);
+				//2) lock gtfsTable, update gtfsTable, unlock gtfsTable
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		private Table prune(Table t) {
+			/*
+			 * Depth-first search through the dependency graph
+			 * and prune dependent Table along the way
+			 */
+		
+			//1) find the vertex associated with the table t in the dependency graph
+			
+			//2) get the neighbors edges of this vertex
+			
+			//3) iterate through the edges found 
+				
+				//3.1) get the "dependencies" of the edge.
+			
+				//3.2
 			
 		}
 	}

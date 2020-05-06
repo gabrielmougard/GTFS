@@ -1,0 +1,86 @@
+service_id,date,exception_type,holiday_name
+RTL220-9-Sa-01C0-BrrQncCnr,20200508,1,
+CR-Sa-Fitchburg-Fll-19,20200509,2,
+CR-Sa-Greenbush-Fll-19,20200509,2,
+CR-Sa-Kingston-Fll-19,20200509,2,
+CR-Sa-Middleborough-Fll-19,20200509,2,
+RTL220-2-Sa-01,20200509,2,
+RTL220-2-Sa-01-ArtMvk,20200509,1,
+RTL220-9-Sa-01,20200509,2,
+CR-Su-Fitchburg-Fll-19,20200510,2,
+CR-Su-Greenbush-Fll-19,20200510,2,
+CR-Su-Kingston-Fll-19,20200510,2,
+CR-Su-Middleborough-Fll-19,20200510,2,
+RTL220-9-Sa-01C0-BrrQncCnr,20200515,1,
+CR-Sa-Fitchburg-Fll-19,20200516,2,
+CR-Sa-Greenbush-Fll-19,20200516,2,
+CR-Sa-Kingston-Fll-19,20200516,2,
+CR-Sa-Middleborough-Fll-19,20200516,2,
+RTL220-9-Sa-01,20200516,2,
+CR-Su-Fitchburg-Fll-19,20200517,2,
+CR-Su-Greenbush-Fll-19,20200517,2,
+CR-Su-Kingston-Fll-19,20200517,2,
+CR-Su-Middleborough-Fll-19,20200517,2,
+RTL220-9-Sa-01C0,20200522,1,
+RTL120-1-Su-01,20200524,1,
+BUS220-11-Su-02,20200525,1,Memorial Day
+BUS220-12-Sa-02,20200525,2,Memorial Day
+BUS220-5-Su-02,20200525,1,Memorial Day
+BUS220-6-Sa-02,20200525,2,Memorial Day
+BUS220-A-Su-02,20200525,1,Memorial Day
+BUS220-B-Sa-02,20200525,2,Memorial Day
+BUS220-F-Su-02,20200525,1,Memorial Day
+BUS220-G-Sa-02,20200525,2,Memorial Day
+BUS220-N-Su-02,20200525,1,Memorial Day
+BUS220-O-Sa-02,20200525,2,Memorial Day
+BUS220-S-Su-02,20200525,1,Memorial Day
+BUS220-T-Sa-02,20200525,2,Memorial Day
+BUS220-X-Su-02,20200525,1,Memorial Day
+BUS220-Y-Sa-02,20200525,2,Memorial Day
+CR-Su-Fairmount-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Fitchburg-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Franklin-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Greenbush-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Haverhill-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Kingston-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Lowell-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Middleborough-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Newburyport-Fll-19C0,20200525,1,Memorial Day
+CR-Su-Providence-FllProvB-19C0,20200525,1,Memorial Day
+CR-Su-Worcester-Fll-19C0,20200525,1,Memorial Day
+CR-Wdy-Fairmount-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Fitchburg-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Franklin-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Greenbush-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Haverhill-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Kingston-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Lowell-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Middleborough-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Needham-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Newburyport-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Providence-StormB-19C0,20200525,2,Memorial Day
+CR-Wdy-Worcester-StormB-19C0,20200525,2,Memorial Day
+CapeFlyer-Snd,20200525,1,Memorial Day
+LRV220-1-Wdy-01S0,20200525,2,Memorial Day
+LRV220-2-Sa-01C0-NwnHgsKnrW,20200525,2,Memorial Day
+LRV220-4-Su-01,20200525,1,Memorial Day
+LRV220-6-Sa-01C0,20200525,2,Memorial Day
+LRV220-8-Su-01,20200525,1,Memorial Day
+PRIV220-2-Sa-01,20200525,2,Memorial Day
+PRIV220-5-Su-01,20200525,1,Memorial Day
+PRIV220-6-Wdy-01,20200525,2,Memorial Day
+PRIV220-6-Wdy-01S0,20200525,2,Memorial Day
+PRIV220-A-Su-01,20200525,1,Memorial Day
+PRIV220-B-Sa-01,20200525,2,Memorial Day
+RTL220-2-Sa-01C0,20200525,2,Memorial Day
+RTL220-4-Su-01,20200525,1,Memorial Day
+RTL220-6-Sa-01C0,20200525,2,Memorial Day
+RTL220-8-Su-01,20200525,1,Memorial Day
+RTL220-9-Sa-01C0-BrrQncCnr,20200525,2,Memorial Day
+RTL220-C-Su-01,20200525,1,Memorial Day
+LRV220-2-Sa-01C0-NwnHgsKnrW,20200529,2,
+RTL220-9-Sa-01C0,20200529,1,
+LRV220-2-Sa-01C0-NwnHgsKnrW,20200605,2,
+RTL220-9-Sa-01C0,20200605,1,
+RTL220-9-Sa-01C0,20200612,1,
+PRIV220-2-Sa-01,20200620,1,

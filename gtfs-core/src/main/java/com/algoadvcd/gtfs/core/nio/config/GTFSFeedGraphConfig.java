@@ -4,6 +4,8 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.DirectedMultigraph;
 
+import tech.tablesaw.api.ColumnType;
+
 public class GTFSFeedGraphConfig {
 	public static Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> defaultConfig() {
 		Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> g = new DirectedMultigraph(GTFSFeedConfigEdge.class);
@@ -445,5 +447,66 @@ public class GTFSFeedGraphConfig {
 
 		//return graph
 		return g;
+	}
+	
+	public static ColumnType[] getColumnType(String tablename) {
+		
+		ColumnType[] types;
+		
+		switch(tablename) {
+		case "agency":
+			types = ColumnType[]{ColumnType., ColumnType.STRING};
+			break;
+			
+		case "calendar":
+			types = {};
+			break;
+			
+		case "calendar_dates":
+			types = {};
+			break;
+			
+		case "fare_attributes":
+			types = {};
+			break;
+			
+		case "fare_rules":
+			types = {};
+			break;
+			
+		case "frequencies":
+			types = {};
+			break;
+			
+		case "routes":
+			types = {};
+			break;
+			
+		case "shapes":
+			types = {};
+			break;
+			
+		case "stops":
+			types = {};
+			break;
+			
+		case "stop_times":
+			types = {};
+			break;
+			
+		case "transfers":
+			types = {};
+			break;
+			
+		case "trips":
+			types = {};
+			break;
+			
+		case default:
+			break
+			
+		}
+		
+		return types;
 	}
 }
