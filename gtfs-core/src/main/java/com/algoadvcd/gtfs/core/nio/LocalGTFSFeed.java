@@ -91,9 +91,9 @@ public class LocalGTFSFeed implements GTFSFeed {
 	    }
 		
 		//pruning tables in order to keep only the data that we really need
-		for (String k: this.gtfsTables.keySet()) {
-			prune(this.gtfsTables.get(k));
-		}
+		//for (String k: this.gtfsTables.keySet()) {
+		//	prune(this.gtfsTables.get(k));
+		//}
 		
 	}
 	
@@ -128,6 +128,8 @@ public class LocalGTFSFeed implements GTFSFeed {
 			Table depdf = this.gtfsTables.get(targetName);
 			for (Map<String, String> deps : tup.second) {
 				//TODO : finish this 
+				String col = deps.get(originTable.name()+".txt");
+				
 			}
 		}
 		

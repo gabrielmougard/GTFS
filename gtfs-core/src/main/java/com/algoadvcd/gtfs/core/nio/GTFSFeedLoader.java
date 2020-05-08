@@ -17,7 +17,9 @@ public class GTFSFeedLoader {
 			feed.fetch();
 			return feed;
 		} else {
-			GTFSFeed feed = new RemoteGTFSFeed(datasetname).fetch();
+			GTFSFeed feed = new RemoteGTFSFeed(datasetname);
+			feed.fetch();
+			return feed;
 		}
 	}
 	public static class GTFSFeedLoaderBuilder {
