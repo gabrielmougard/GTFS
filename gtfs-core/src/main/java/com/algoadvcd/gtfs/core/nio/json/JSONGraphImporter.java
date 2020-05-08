@@ -4,9 +4,8 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 import com.algoadvcd.gtfs.core.Graph;
-import com.algoadvcd.gtfs.core.nio.BucketConfiguration;
-import com.algoadvcd.gtfs.core.nio.GraphImporter;
-
+import com.algoadvcd.gtfs.core.nio.gtfs2feed.BucketConfiguration;
+import com.algoadvcd.gtfs.core.nio.gtfs2feed.GraphImporter;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;

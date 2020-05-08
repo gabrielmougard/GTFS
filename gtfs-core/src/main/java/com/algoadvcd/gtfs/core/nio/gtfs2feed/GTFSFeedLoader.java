@@ -1,4 +1,4 @@
-package com.algoadvcd.gtfs.core.nio;
+package com.algoadvcd.gtfs.core.nio.gtfs2feed;
 
 import tech.tablesaw.api.Table;
 

@@ -1,4 +1,4 @@
-package com.algoadvcd.gtfs.core.nio;
+package com.algoadvcd.gtfs.core.nio.gtfs2feed;
 
 import java.io.IOException;
 import java.io.InputStream;
