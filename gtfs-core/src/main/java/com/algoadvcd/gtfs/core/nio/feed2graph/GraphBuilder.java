@@ -80,7 +80,18 @@ public class GraphBuilder {
 		
 	}
 	
-	private calculateMeansDefault() {
+	private double calculateMeansDefault(
+			double targetTimeStart,
+			double targetTimeEnd,
+			List<Double> arrivalTimes) {
+		
+		if (arrivalTimes.size() < 2) {
+			logger.info("not enough arrival times");
+			return 0.00;
+		}
+		
+		//TODO : continue implementation
+		
 		
 	}
 }
