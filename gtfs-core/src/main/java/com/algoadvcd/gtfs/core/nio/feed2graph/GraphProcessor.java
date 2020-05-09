@@ -38,15 +38,4 @@ public class GraphProcessor {
 		
 	}
 	
-	private generateGraphNodeDataframe() {
-		
-	}
-	
-	private getNearestNodes() {
-		
-	}
-	
-	private greatCircleVec() {
-		
-	}
 }

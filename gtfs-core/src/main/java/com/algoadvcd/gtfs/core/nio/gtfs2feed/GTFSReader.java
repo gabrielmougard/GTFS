@@ -29,9 +29,9 @@ public class GTFSReader {
 	private String datasetname;
 	private static Set<String> DAY_NAMES;
 	
-	private GTFSReader(GTFSReaderBuilder builder) {
-		this.target = builder.target;
-		this.datasetname = builder.datasetname;
+	public GTFSReader(GTFSReaderBuilder builder) {
+		this.target = builder.getTarget();
+		this.datasetname = builder.getDatasetName();
 		String[] days = new String[]{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
 		this.DAY_NAMES = new HashSet<String>(Arrays.asList(days));
 	}
@@ -58,13 +58,13 @@ public class GTFSReader {
 		}
 	}
 	
-	public Map<Date, Set<String>> readServiceIdsByDate(String path) {
-		GTFSFeed feed = loadRawFeed(path);
+	public Map<Date, Set<String>> readServiceIdsByDate() {
+		GTFSFeed feed = loadRawFeed(this.datasetname);
 		return serviceIdsByDate(feed);
 	}
 	
-	public Map<Date, Integer> readTripCountsByDate(String path) {
-		GTFSFeed feed = loadRawFeed(path);
+	public Map<Date, Integer> readTripCountsByDate() {
+		GTFSFeed feed = loadRawFeed(this.datasetname);
 		return tripCountsByDate(feed);
 	}
 	
@@ -297,30 +297,6 @@ public class GTFSReader {
 	
 	private GTFSFeed _loadFeed(String path, Graph<GTFSFeedConfigVertex, GTFSFeedConfigEdge> config) {
 		
-	}
-	
-	public static class GTFSReaderBuilder {
-		private String datasetname;
-		private Target target;
-		
-		public GTFSReaderBuilder(String datasetname) {
-			this.datasetname = datasetname;
-		}
-		
-		public GTFSReaderBuilder localReader() {
-			this.target = Target.LOCAL;
-			return this;
-		}
-		
-		public GTFSReaderBuilder remoteReader() {
-			this.target = Target.REMOTE;
-			return this;
-			
-		}
-		
-		public GTFSReader build() {
-			return new GTFSReader(this);
-		}
 	}
 	
 }
