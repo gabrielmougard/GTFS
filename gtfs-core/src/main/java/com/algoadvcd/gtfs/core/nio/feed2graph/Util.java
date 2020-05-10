@@ -3,6 +3,7 @@ package com.algoadvcd.gtfs.core.nio.feed2graph;
 import java.security.SecureRandom;
 
 public class Util {
+	
 	public static String generateRamdomName() {
 		int stringLength = 5;
 		String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
