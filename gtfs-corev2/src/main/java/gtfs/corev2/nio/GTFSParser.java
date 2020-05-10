@@ -10,6 +10,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedMultigraph;
 
 import gtfs.corev2.*;
+import gtfs.corev2.nio.util.Tuple;
 
 
 public class GTFSParser {
@@ -58,7 +59,7 @@ public class GTFSParser {
 			List<List<String>> res = convertEdgesMap2List(edges);
 			
 			// write res variable to resources to debug the output
-			writeToResources(res);
+			//writeToResources(res);
 			//
 			
 			return res;
@@ -259,6 +260,18 @@ public class GTFSParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	private Tuple<Map<String, List<String>>, Map<String, String>> readStops()  {
+		List<List<String>> stops = this.gtfsTables.get("stops.txt");
+	}
+	
+	private void addRoutesInfosToStops(Map<String, List<String>> stops) {
+		
+	}
+	
+	private void parseEdges() {
 		
 	}
 }
