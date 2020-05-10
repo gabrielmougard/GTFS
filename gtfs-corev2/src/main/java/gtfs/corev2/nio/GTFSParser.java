@@ -263,12 +263,67 @@ public class GTFSParser {
 		
 	}
 	
-	private Tuple<Map<String, List<String>>, Map<String, String>> readStops()  {
-		List<List<String>> stops = this.gtfsTables.get("stops.txt");
+	private Map<String, List<String>> readStops()  {
+		Iterator<List<String>> itStops = this.gtfsTables.get("stops.txt").iterator();
+		Map<String, List<String>> res = new HashMap<String, List<String>>();
+		while(itStops.hasNext()) {
+			List<String> line = itStops.next();
+			res.put(line.get(0), line.subList(1, line.size()));
+		}
+		return res;
 	}
 	
 	private void addRoutesInfosToStops(Map<String, List<String>> stops) {
+		//TODO : result of get_stops_for_line is Map<String, Map<String, String>>
+		// get_stops_for_line
+		Map<String, Map<String, String>> routes = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, String>> trips = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, String>> stopsForThisLine = new HashMap<String, Map<String, String>>();
+		int nbStopsForLine = 0;
 		
+		//routes
+		Iterator<List<String>> itRoutes = this.gtfsTables.get("routes.txt").iterator();
+		while (itRoutes.hasNext()) {
+			List<String> line = itRoutes.next();
+			Map<String, String> m = new HashMap<String, String>();
+			m.put("line",line.get(2));
+			m.put("dir", line.get(3));
+			m.put("type", line.get(5));
+			routes.put(line.get(0), m);
+		}
+		
+		//trips
+		Iterator<List<String>> itTrips = this.gtfsTables.get("trips.txt").iterator();
+		while (itTrips.hasNext()) {
+			List<String> line = itTrips.next();
+			String tripRouteId = line.get(0);
+			String tripId = line.get(2);
+			trips.put(tripId, routes.get(tripRouteId));
+		}
+		
+		//stop_times
+		Iterator<List<String>> itStops = this.gtfsTables.get("stops.txt").iterator();
+		while (itStops.hasNext()) {
+			nbStopsForLine++;
+			itStops.next();
+		}
+		
+		Iterator<List<String>> itStopTimes = this.gtfsTables.get("stop_times.txt").iterator();
+		while (itStopTimes.hasNext()) {
+			List<String> line = itStopTimes.next();
+			if (stopsForThisLine.size() == nbStopsForLine) {
+				break;
+			}
+			String stopTripId = line.get(0);
+			String stopId = line.get(3);
+			stopsForThisLine.put(stopId, trips.get(stopTripId));
+		}
+		
+		for (Map.Entry<String, Map<String, String>> entry : stopsForThisLine.entrySet()) {
+			
+		}
+		
+		//
 	}
 	
 	private void parseEdges() {
