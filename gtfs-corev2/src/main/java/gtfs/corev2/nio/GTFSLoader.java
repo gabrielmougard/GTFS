@@ -1,15 +1,23 @@
 package gtfs.corev2.nio;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 
 
 public class GTFSLoader {
@@ -48,10 +56,10 @@ public class GTFSLoader {
 		} else {
 			
 			ExecutorService executorService = Executors.newFixedThreadPool(this.datasetFiles.length);
-			SynchronizedLocalLoader loader = new SynchronizedLocalLoader(this.gtfsTables, this.pathToDataset);
+			SynchronizedRemoteLoader loader = new SynchronizedRemoteLoader(this.gtfsTables, this.pathToDataset);
 			for (String file : this.datasetFiles) {
 				executorService.submit(() -> loader.load(file));
-				System.out.println("ComputeLocal task created for : "+file);
+				System.out.println("ComputeRemote task created for : "+file);
 			}
 			executorService.shutdown();
 	        try {
@@ -117,14 +125,46 @@ public class GTFSLoader {
 		
 		private Map<String, List<List<String>>> gtfsTables;
 		private String pathToDataset;
+		private Storage storage;
+		private String bucketName;
 		
 		public SynchronizedRemoteLoader(Map<String, List<List<String>>> gtfsTables, String pathToDataset) {
 			this.gtfsTables = gtfsTables;
 			this.pathToDataset = pathToDataset;
+			this.storage = StorageOptions.getDefaultInstance().getService();
+			this.bucketName = BucketConfiguration.BUCKET_NAME;
 		}
 		
 		public synchronized void load(String file) {
 			//TODO
+			
+			Blob blob = this.storage.get(BlobId.of(this.bucketName, this.pathToDataset+"/"+file));
+			ReadChannel reader = blob.reader();
+			byte[] decoded = null;
+	        ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
+	        try {
+	        	while (reader.read(bytes) > 0) {
+	        		bytes.flip();
+				    decoded = bytes.array();
+				    bytes.clear();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        InputStream decodedStream = new ByteArrayInputStream(decoded);
+	        System.out.println("[REMOTE] Converting "+file+" ...");
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(decodedStream));
+				// skip the header of the csv
+			    List<List<String>> inputList = br.lines().skip(1).map(mapToItem).collect(Collectors.toList());
+			    br.close();
+				this.gtfsTables.put(file, inputList);
+				System.out.println("ComputeRemote task ended for : "+file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		public Map<String, List<List<String>>> getTables() {
