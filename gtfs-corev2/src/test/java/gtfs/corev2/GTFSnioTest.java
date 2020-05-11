@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 import org.jgrapht.Graph;
 
+
 public class GTFSnioTest {
     @Test 
     public void testLocalGraphBuilder() {
@@ -18,5 +19,8 @@ public class GTFSnioTest {
         		new GTFSGraphBuilder("mbta")
         		.localDataset()
         		.build();
+        
+        System.out.println("The graph has : "+g.vertexSet().size()+" vertices.");
+        System.out.println("The graph has : "+g.edgeSet().size()+" edges.");
     }
 }

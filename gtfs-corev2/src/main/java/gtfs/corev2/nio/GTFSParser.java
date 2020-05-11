@@ -10,6 +10,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedMultigraph;
 
 import gtfs.corev2.*;
+import gtfs.corev2.nio.util.Distance;
 import gtfs.corev2.nio.util.Tuple;
 
 
@@ -33,6 +34,7 @@ public class GTFSParser {
 	public Graph<GTFSVertex, GTFSEdge> build() {
 		Graph<GTFSVertex, GTFSEdge> g = new DirectedMultigraph(GTFSEdge.class);
 		
+		
 		//build the graph
 		try {
 			this.edgeList = buildEdgeList();
@@ -45,6 +47,7 @@ public class GTFSParser {
 		//return g
 		return g;
 	}
+	
 	
 	private List<List<String>> buildEdgeList() throws Exception {
 		if (this.gtfsTables.containsKey("transfers.txt") && this.gtfsTables.containsKey("stop_times.txt")) {
@@ -225,7 +228,9 @@ public class GTFSParser {
 	}
 	
 	private void buildGraph(Graph<GTFSVertex, GTFSEdge> g) {
-		//use this.edgeList
+		Map<String, List<String>> stops = readStops();
+		//addRoutesInfosToStops(stops);
+		parseEdges(stops, g);
 		
 	}
 	
@@ -320,13 +325,74 @@ public class GTFSParser {
 		}
 		
 		for (Map.Entry<String, Map<String, String>> entry : stopsForThisLine.entrySet()) {
+			//TODO
 			
 		}
 		
 		//
 	}
 	
-	private void parseEdges() {
+	private void parseEdges(Map<String, List<String>> stops, Graph<GTFSVertex, GTFSEdge> g) {
+		//use this.edgeList
+		Iterator<List<String>> itEdgeList = this.edgeList.iterator();
+		Set<String> added = new HashSet<String>();
 		
+		while (itEdgeList.hasNext()) {
+			List<String> line = itEdgeList.next();
+			
+			String fromStopId = line.get(0);
+			String toStopId = line.get(1);
+			String duration = line.get(2);
+			String beginTime = line.get(3);
+			String endTime = line.get(4);
+			String edgeType = line.get(5);
+			String freq = "";
+			if (line.size() == 7) {
+				freq = line.get(6);
+			}
+			
+			
+			//map ids
+			List<String> mappedFromStopId = stops.get(fromStopId);
+			List<String> mappedToStopId = stops.get(toStopId);
+			
+			// create nodes
+			try {
+				if ((!stops.get(fromStopId).get(5).isEmpty() && 
+					!stops.get(fromStopId).get(6).isEmpty()) &&
+					(!stops.get(toStopId).get(5).isEmpty()) &&
+					!stops.get(toStopId).get(6).isEmpty()){
+					
+					GTFSVertex v = new GTFSVertex(
+							fromStopId,
+							stops.get(fromStopId).get(1), //name
+							stops.get(fromStopId).get(5), //lat 
+							stops.get(fromStopId).get(6) //lon
+					);
+					
+					System.out.println("name : "+stops.get(toStopId).get(1));
+					GTFSVertex w = new GTFSVertex(
+							toStopId,
+							stops.get(toStopId).get(1), //name
+							stops.get(toStopId).get(5), //lat 
+							stops.get(toStopId).get(6) //lon
+					);
+					if (!g.containsVertex(v)) {
+						g.addVertex(v);
+					}
+					if (!g.containsVertex(w)) {
+						g.addVertex(w);
+					}
+					g.addEdge(v, w, new GTFSEdge(Distance.latlon(v.getLat(), v.getLon(), w.getLat(), w.getLon())));
+					
+					
+				} else {
+					System.out.println("empty lat or lon in v or w");
+				}
+				
+			} catch( NullPointerException e) {
+				System.out.println("null pointer exception...");
+			}	
+		}
 	}
 }

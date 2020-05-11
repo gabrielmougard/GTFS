@@ -1,7 +1,6 @@
 package com.algoadvcd.gtfs.core;
 
 import java.util.*;
-import java.util.function.*;
 
 public interface Graph<V> extends Iterable<V> {
 

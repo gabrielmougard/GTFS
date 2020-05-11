@@ -5,11 +5,8 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jgrapht.Graph;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import gtfs.corev2.*;
-import tech.tablesaw.api.Table;
 
 public class GTFSGraphBuilder {
 	
@@ -42,6 +39,7 @@ public class GTFSGraphBuilder {
 		return this;
 	}
 	
+	
 	public Graph<GTFSVertex, GTFSEdge> build() {
 		
 		if (this.target == null) {
@@ -54,8 +52,7 @@ public class GTFSGraphBuilder {
 			return new GTFSParser(tables).build();
 		} else {
 			return new GTFSParser(this.pathToDataset, this.jsonFilename).build();
-		}
-		 
+		} 
 		
 	}
 }
