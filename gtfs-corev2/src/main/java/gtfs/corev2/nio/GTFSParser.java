@@ -370,7 +370,6 @@ public class GTFSParser {
 							stops.get(fromStopId).get(6) //lon
 					);
 					
-					System.out.println("name : "+stops.get(toStopId).get(1));
 					GTFSVertex w = new GTFSVertex(
 							toStopId,
 							stops.get(toStopId).get(1), //name
@@ -391,7 +390,7 @@ public class GTFSParser {
 				}
 				
 			} catch( NullPointerException e) {
-				System.out.println("null pointer exception...");
+			
 			}	
 		}
 	}

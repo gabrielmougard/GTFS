@@ -2,6 +2,7 @@ package gtfs.corev2.nio;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.google.api.services.storage.Storage.Channels;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.ReadChannel;
@@ -22,6 +24,7 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.Storage.BucketGetOption;
 import com.google.cloud.storage.StorageOptions;
+import com.google.common.primitives.Bytes;
 
 
 public class GTFSLoader {
@@ -54,7 +57,7 @@ public class GTFSLoader {
 				e.printStackTrace();
 			}
 	        this.gtfsTables = loader.getTables();
-	       
+	        
 			return this.gtfsTables;
 			
 		} else {
@@ -170,26 +173,14 @@ public class GTFSLoader {
 		    System.out.println("StorageClass: " + bucket.getStorageClass().name());
 		    System.out.println("TimeCreated: " + bucket.getCreateTime());
 		    System.out.println("VersioningEnabled: " + bucket.versioningEnabled());
+		    System.out.println("");
 		}
 		
 		public synchronized void load(String file) {
-			
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			Blob blob = this.storage.get(BlobId.of(this.bucketName, this.pathToDataset+"/"+file));
-			
-			ReadChannel reader = blob.reader();
-			byte[] decoded = null;
-	        ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
-	        try {
-	        	while (reader.read(bytes) > 0) {
-	        		bytes.flip();
-				    decoded = bytes.array();
-				    bytes.clear();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        InputStream decodedStream = new ByteArrayInputStream(decoded);
+			blob.downloadTo(out, Blob.BlobSourceOption.generationMatch());
+	        InputStream decodedStream = new ByteArrayInputStream(out.toByteArray());
 	        System.out.println("[REMOTE] Converting "+file+" ...");
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(decodedStream));
