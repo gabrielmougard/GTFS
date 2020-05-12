@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "greengourmet-272110",
+  "private_key_id": "28f5067eb919cbf68dbf510453980bf0e48dbaa3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCYm31t4XRskHbU\nKhhmJ4oskD8tWIRYt4wB0X0ZnfRqM5XJckvwdA8DhkKflRPgXp1rFS717aKd1JWy\nw1a4kC8lbeytzyoCYteT5omF+Vp11MkCZnjdxWclkD6qjjl1FesM1zHE+fOPxzhl\nkRwsZXQ/DZUY4LQCGA6FWtO8VJQ7E9BMFOOiRfcHGV5wG98Ya9eeuJkTUt+iiX93\nGa9YenDs++cnLmaVCARNiwHDTr8p/jiExYeg906LfLlcje3xcjNqpdT9PcDacOFs\nKx/tcskD4cGWxBLGa4f2lvVnW/MBWjK2yC8XFDNbrg39mYq8S+Ulomum1p1LAkMy\nmUsCsPulAgMBAAECggEAFbMIWQM1mYlKKD1rFj15j4AcR5+eQ/onYYvO4MFdw2sd\n2ZTTuPdbuinRV90sBBuYASW0NXpqhMw5U/+kGV7BIW6ZuJYsOEYjNq/Rbrgn1Xjh\n8yIsfgZHdicmTfymrWAmOb9wn3xWFmPiwEhrq+FqL9wHzw+GcQTILcyeLlmNcT/W\nCEt+abn5TAub+4TncSB/9W51ixrIB3xFq5GADZs0+FddkpRWoqOJYGkf8MTwdH0L\n7UqB1vFJttRsh2ay2AUqMliDGGIFDSoNoC39vyaypz4Z3X5Febm7Lak0mWMxzW3C\nfDVG3/vrY3QKEFnbsvCU/mfJIEDNAYqlPW4hMFu5aQKBgQDHd20IUFQKQ8TZHbLb\n56FlCt3FlsEkDQYKE+8mKcCFMtzrronvfGEXkFQtjgPrmrUnoERQ98wP3fdlD9v4\nzHQ2cz/HDhcliM9VJyizpGpSAYdHMxHI9yS0aoegjxwjq6S67Z8vRrb/Ul1augUH\nle1mQb99U3okBokhA2uoYErafQKBgQDD3CJTZ9tNKrU9g8eTyTRK+rJTs4Dazg/q\ngLNAVQHr536ltO5bjocLLdHeUFBVzBRtEh965sGq5gagtaFIVDxrBFT9SFAxiOog\nY7SldppZy34j1oDATtzC9RDlozbenMhkKkdHBs+1PQL/JK1FBZL9GDZDzxoKXo9g\nsY/CnIzGSQKBgHm3J2JWWiH1Xo46MCU+P97/dXqX1n2gMNo/dcQs4Bynf+WVGPh5\nRmnxmVw+96dyPS7T/jwGKZBZGxihR9KXOCbtxrI5p+gwhovonE6aeoJWCm1o/WZL\nYStyghZ4nWwq1hd23pcjqJE+elbdgiox0659WlMoeDS5hD4P70bMk4ClAoGAR0hb\nBdgKrK8af2Tywgq8iX1sYaI3B2tvx31Hv+YwaNc79LtA9PmOlLb8Ztj8I/2+gWPT\nKTvKyJQnXV49cMGXq6tL81LaPO0DqP4gxQfBbWTuZ8St30/UcPAYUjtwwNx24l2w\ny1zjQ6cM7CdBGJnKwWqKdWtuos9/h0WYeM/ZPGECgYBIy+mwu/wVHnREikgzJyC/\nGam+/dQQsajksshkM+YjYolu/yFOY7lG0dYzIPozlgUWsg5kgEbFC1MndtiMwgPe\nQqnFMV0ymMkchLgHA1DazhCDeszIlTD+h64q2X9xtJpW8tUcF8zE2buVGibLdfyE\nkyBzQM+AdFHphqRxqC9wKg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "gtfs-bucket@greengourmet-272110.iam.gserviceaccount.com",
+  "client_id": "111494454719936126300",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gtfs-bucket%40greengourmet-272110.iam.gserviceaccount.com"
+}

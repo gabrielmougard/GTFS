@@ -17,7 +17,7 @@ public class GTFSnioTest {
     public void testLocalGraphBuilder() {
         Graph<GTFSVertex, GTFSEdge> g = 
         		new GTFSGraphBuilder("mbta")
-        		.localDataset()
+        		.remoteDataset()
         		.build();
         
         System.out.println("The graph has : "+g.vertexSet().size()+" vertices.");
