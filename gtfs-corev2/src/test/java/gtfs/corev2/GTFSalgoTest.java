@@ -2,7 +2,7 @@ package gtfs.corev2;
 
 import org.junit.Test;
 
-import gtfs.corev2.algorithms.shortestpath.BFSShortestPath;
+//import gtfs.corev2.algorithms.shortestpath.BFSShortestPath;
 import gtfs.corev2.nio.GTFSGraphBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder.GraphSerializer;
@@ -13,6 +13,8 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.BFSShortestPath;
 
 public class GTFSalgoTest {
 
@@ -28,8 +30,15 @@ public class GTFSalgoTest {
 		if (travel.first != null && travel.second != null) {
 			System.out.println("starting node : "+travel.first.toString());
 			System.out.println("target node : "+travel.second.toString());
-			System.out.println("starting BFS algorithm...");
-			List<GTFSVertex> path = new BFSShortestPath(g, travel.first, travel.second).getPath();
+			System.out.println("");
+			System.out.println("////////////////////////////////////////////////////");
+			System.out.println("///////////// starting BFS algorithm... ////////////");
+			System.out.println("////////////////////////////////////////////////////");
+			//List<GTFSVertex> path = new BFSShortestPath(g, travel.first, travel.second).getPath();
+			BFSShortestPath<GTFSVertex, GTFSEdge> bfs =
+		            new BFSShortestPath<>(g);
+			List<GTFSVertex> path = bfs.getPath(travel.first, travel.second).getVertexList();
+			
 			if (path.size() > 0) {
 				for (GTFSVertex v : path) {
 					System.out.println(v.toString());
