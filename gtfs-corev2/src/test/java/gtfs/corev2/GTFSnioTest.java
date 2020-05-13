@@ -6,8 +6,12 @@ package gtfs.corev2;
 import org.junit.Test;
 
 import gtfs.corev2.nio.GTFSGraphBuilder;
+import gtfs.corev2.nio.GraphSerializerBuilder;
+import gtfs.corev2.nio.GraphSerializerBuilder.GraphSerializer;
 
 import static org.junit.Assert.*;
+
+import java.util.Iterator;
 
 import org.jgrapht.Graph;
 
@@ -17,10 +21,35 @@ public class GTFSnioTest {
     public void testLocalGraphBuilder() {
         Graph<GTFSVertex, GTFSEdge> g = 
         		new GTFSGraphBuilder("mbta")
-        		.remoteDataset()
+        		.localDataset()
         		.build();
         
         System.out.println("The graph has : "+g.vertexSet().size()+" vertices.");
         System.out.println("The graph has : "+g.edgeSet().size()+" edges.");
+        
+        Iterator<GTFSVertex> it = g.vertexSet().iterator();
+        for (int i = 0; i < 10; i++) {
+        	GTFSVertex v = it.next();
+        	System.out.println(v.toString());
+        }
+        
+        //serialization test (local)
+        //GraphSerializer gs = 
+        //	new GraphSerializerBuilder("mbta")
+        //	.localSerializer()
+        //	.build();
+        
+        //gs.serialize(g);
+        
+        //serialization test (remote)
+        //GraphSerializer gsRemote = 
+        //	new GraphSerializerBuilder("mbta")
+        //	.remoteSerializer()
+        //	.build();
+        
+        //gsRemote.serialize(g);
+        
+        
     }
+    
 }

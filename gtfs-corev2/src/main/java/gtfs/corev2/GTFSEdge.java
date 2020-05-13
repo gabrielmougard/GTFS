@@ -1,8 +1,10 @@
 package gtfs.corev2;
 
+import java.io.Serializable;
+
 import org.jgrapht.graph.DefaultEdge;
 
-public class GTFSEdge extends DefaultEdge {
+public class GTFSEdge extends DefaultEdge implements Serializable{
 
 	private Double weight;
 	

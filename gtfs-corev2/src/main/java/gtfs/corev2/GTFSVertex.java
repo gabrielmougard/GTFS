@@ -1,9 +1,11 @@
 package gtfs.corev2;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class GTFSVertex {
+public class GTFSVertex implements Serializable {
 	private String vertexId;
 	private String name;
 	private Double lat;
@@ -66,5 +68,10 @@ public class GTFSVertex {
         return new EqualsBuilder().
             append(vertexId, rhs.getVertexId()).
             isEquals();
+    }
+    
+    @Override
+    public String toString() {
+    	return "{ VertexId : "+vertexId+"\n"+"Name : "+name+"\n"+"lat : "+lat+"\n"+"lon : "+lon+"\n}";
     }
 }
