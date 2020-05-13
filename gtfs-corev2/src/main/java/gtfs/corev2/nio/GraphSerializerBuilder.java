@@ -350,7 +350,29 @@ public class GraphSerializerBuilder {
 			//then run the GraphImporter and return g
 			try {
 				
-				
+				//initialize GCP client
+				Storage storage;
+				try {
+					Credentials credentials = GoogleCredentials.fromStream(
+							getClass()
+							.getClassLoader()
+							.getResourceAsStream(BucketConfiguration.BUCKET_CREDENTIALS)
+					);
+					storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
+
+				String bucketName = BucketConfiguration.BUCKET_NAME;				
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				Blob blob = storage.get(BlobId.of(bucketName, this.pathToDataset+"/"+this.pathToDataset+"_graph.json"));
+				blob.downloadTo(out, Blob.BlobSourceOption.generationMatch());
+		        InputStream decodedStream = new ByteArrayInputStream(out.toByteArray());
+		        
+		        // import graph and return it.
+				ji.importGraph(g, decodedStream);
 				return g;
 			} catch(Exception e) {
 				e.printStackTrace();
