@@ -23,16 +23,16 @@ public class GTFSEdge extends DefaultEdge implements Serializable{
 	
 	@Override
 	public GTFSVertex getSource() {
-		return getSource(); 
+		return (GTFSVertex) super.getSource(); 
 	}
 	
 	@Override
 	public GTFSVertex getTarget() {
-		return getTarget(); 
+		return (GTFSVertex) super.getTarget(); 
 	}
 	
 	@Override
 	public String toString() {
-		return "Source : "+super.getSource().toString()+"\nTarget : "+super.getTarget().toString()+"\nDistance (in km) : "+this.weight+"\n";
+		return "Source : "+getSource().toString()+"\nTarget : "+getTarget().toString()+"\nDistance (in km) : "+this.weight+"\n";
 	}
 }
