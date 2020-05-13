@@ -1,15 +1,9 @@
 package gtfs.corev2;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
@@ -20,12 +14,10 @@ import com.mxgraph.swing.mxGraphComponent;
 import gtfs.corev2.nio.GTFSGraphBuilder;
 
 public class GraphVisualizer extends JFrame {
-	/** Pour éviter un warning venant du JFrame */
+	
 	private static final long serialVersionUID = -8123406571694511514L;
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
     private JGraphXAdapter<GTFSVertex, GTFSEdge> jgxAdapter;
-    private Rectangle2D[] rects = new Rectangle2D[50];
-    private Rectangle2D r = new Rectangle2D.Float();
     
     public static void main(String[] args)
     {
