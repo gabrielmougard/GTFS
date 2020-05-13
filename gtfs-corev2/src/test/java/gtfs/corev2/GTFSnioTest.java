@@ -27,10 +27,10 @@ public class GTFSnioTest {
         System.out.println("The graph has : "+g.vertexSet().size()+" vertices.");
         System.out.println("The graph has : "+g.edgeSet().size()+" edges.");
         
-        Iterator<GTFSVertex> it = g.vertexSet().iterator();
+        Iterator<GTFSEdge> it = g.edgeSet().iterator();
         for (int i = 0; i < 10; i++) {
-        	GTFSVertex v = it.next();
-        	System.out.println(v.toString());
+        	GTFSEdge e = it.next();
+        	System.out.println(e.toString());
         }
         
         //serialization test (local)

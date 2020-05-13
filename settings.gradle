@@ -8,5 +8,5 @@
  */
 
 rootProject.name = 'gtfs'
-include 'gtfs-core',
+include 'gtfs-corev2',
 		'gtfs-api'
