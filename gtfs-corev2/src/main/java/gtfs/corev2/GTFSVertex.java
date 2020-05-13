@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class GTFSVertex implements Serializable {
+	private static final long serialVersionUID = 354999994054L;
 	private String vertexId;
 	private String name;
 	private Double lat;

@@ -30,16 +30,18 @@ public class GTFSnioTest {
         Iterator<GTFSEdge> it = g.edgeSet().iterator();
         for (int i = 0; i < 10; i++) {
         	GTFSEdge e = it.next();
-        	System.out.println(e.toString());
+        	if (Double.isNaN(e.getWeight())) {
+        		System.out.println("the NaN edge : "+e.toString());
+        	}
         }
         
         //serialization test (local)
-        //GraphSerializer gs = 
-        //	new GraphSerializerBuilder("mbta")
-        //	.localSerializer()
-        //	.build();
+        GraphSerializer gs = 
+        	new GraphSerializerBuilder("mbta")
+        	.localSerializer()
+        	.build();
         
-        //gs.serialize(g);
+        gs.serialize(g);
         
         //serialization test (remote)
         //GraphSerializer gsRemote = 
