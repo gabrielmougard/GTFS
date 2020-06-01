@@ -3,6 +3,7 @@
  */
 package gtfs.corev2;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -67,8 +68,8 @@ public class GTFSnioTest {
         	.build();
         
         Graph<GTFSVertex, GTFSEdge> g3 = gi.unserialize();
-        System.out.println("The unserialized graph3 has : "+g3.vertexSet().size()+" vertices.");
-        System.out.println("The unserialized graph3 has : "+g3.edgeSet().size()+" edges.");
+        System.out.println("The unserialized local graph has : "+g3.vertexSet().size()+" vertices.");
+        System.out.println("The unserialized local graph has : "+g3.edgeSet().size()+" edges.");
         
         //unserialization test(remote)
         GraphSerializer gir =
@@ -77,9 +78,25 @@ public class GTFSnioTest {
             	.build();
             
         Graph<GTFSVertex, GTFSEdge> g4 = gi.unserialize();
-        System.out.println("The unserialized remote graph has : "+g3.vertexSet().size()+" vertices.");
-        System.out.println("The unserialized remote graph has : "+g3.edgeSet().size()+" edges.");
+        System.out.println("The unserialized remote graph has : "+g4.vertexSet().size()+" vertices.");
+        System.out.println("The unserialized remote graph has : "+g4.edgeSet().size()+" edges.");
         
+        
+        // Data integrity test :
+        // test if the data in g and the ones in the unserialized versions are the same
+        Assert.assertTrue((g.vertexSet().equals(g3.vertexSet())) && (g.vertexSet().equals(g4.vertexSet())));
+        // not working (figure why)
+        //Assert.assertTrue((g.edgeSet().equals(g3.edgeSet())) && (g.edgeSet().equals(g4.edgeSet())));
+        /*
+        int count = 0;
+        for (GTFSEdge e : g3.edgeSet()) {
+        	System.out.println(e.toString());
+        	if (count >= 9) {
+        		break;
+        	}
+        	count++;
+        }
+        */
         
     }
     

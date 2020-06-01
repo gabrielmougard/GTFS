@@ -2,6 +2,7 @@ package gtfs.corev2;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
@@ -37,4 +38,17 @@ public class GTFSEdge extends DefaultEdge implements Serializable{
 	public String toString() {
 		return "Source : "+getSource().toString()+"\nTarget : "+getTarget().toString()+"\nDistance (in km) : "+this.weight+"\n";
 	}
+	
+	@Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof GTFSEdge))
+            return false;
+        if (obj == this)
+            return true;
+
+        GTFSEdge rhs = (GTFSEdge) obj;
+        return new EqualsBuilder().
+            append(this.toString(), rhs.toString()).
+            isEquals();
+    }
 }
