@@ -12,6 +12,13 @@ public class GTFSVertex implements Serializable {
 	private Double lat;
 	private Double lon;
 	
+	public GTFSVertex() {
+		this.setVertexId("");
+		this.setName("");
+		this.setLat(0.0);
+		this.setLon(0.0);
+	}
+	
 	public GTFSVertex(String vertexId, String name, String lat, String lon) {
 		this.setVertexId(vertexId);
 		this.setName(name);

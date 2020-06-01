@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,17 +13,15 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
+
 import java.util.function.Function;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.io.ComponentAttributeProvider;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.json.JSONExporter;
-import org.jgrapht.nio.json.JSONImporter;
 import org.jgrapht.util.*;
 
 import com.google.auth.Credentials;
@@ -31,14 +29,15 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.google.cloud.storage.Storage.BucketGetOption;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import gtfs.corev2.GTFSEdge;
 import gtfs.corev2.GTFSVertex;
-import gtfs.corev2.nio.GTFSLoader.SynchronizedLocalLoader;
 
 public class GraphSerializerBuilder {
 	private String pathToDataset;
@@ -100,20 +99,20 @@ public class GraphSerializerBuilder {
 				}
 			}
 		}
-		/*
+	
 		public Graph<GTFSVertex, GTFSEdge> unserialize() {
 			if (this.target == Target.LOCAL) {
 				SynchronizedSerializer serializer = new SynchronizedSerializer(this.pathToDataset);
-				serializer.unserializeLocal();
+				return serializer.unserializeLocal();
 			} else if (this.target == Target.REMOTE) {
 				SynchronizedSerializer serializer = new SynchronizedSerializer(this.pathToDataset);
-				serializer.unserializeRemote();
+				return serializer.unserializeRemote();
 			} else {
 				SynchronizedSerializer serializer = new SynchronizedSerializer(this.pathToDataset);
-				serializer.unserializeRemote();
+				return serializer.unserializeRemote();
 			}
 		}
-		*/
+	
 	}
 	
 	
@@ -259,97 +258,77 @@ public class GraphSerializerBuilder {
 		
 		
 		public synchronized Graph<GTFSVertex, GTFSEdge> unserializeLocal() {
-			JSONImporter<GTFSVertex, GTFSEdge> ji = new JSONImporter<GTFSVertex, GTFSEdge>();
 			Graph<GTFSVertex, GTFSEdge> g = new DirectedMultigraph(GTFSEdge.class);
 			
-			//setup the Vertex and Edges BiConsummer
-			ji.addVertexAttributeConsumer((p, attrValue) -> {
-				GTFSVertex v = p.getFirst();
-	            String attrName = p.getSecond();
-	            
-	            if (attrName.equals("vertexId")) {
-	            	v.setVertexId(attrValue.getValue());
-	            } else if (attrName.equals("lat")) {
-	            	v.setLat(Double.parseDouble(attrValue.getValue()));
-	            } else if (attrName.equals("lon")) {
-	            	v.setLon(Double.parseDouble(attrValue.getValue()));
-	            } else if (attrName.equals("name")){
-	            	v.setName(attrValue.getValue());
-	            } else {
-	            	System.out.println("Error while decoding file for vertices : wrong attribute name : "+attrName);
-	            }
-			});
-			
-			ji.addEdgeAttributeConsumer((p, attrValue) -> {
-				GTFSEdge e = p.getFirst();
-	            String attrName = p.getSecond();
-	            
-	            if (attrName.equals("distance")) {
-	            	e.setWeight(Double.parseDouble(attrValue.getValue()));
-	            } else {
-	            	System.out.println("Error while decoding file for edges : wrong attribute name : "+attrName);
-	            }
-			});
-			//
+			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			InputStream is = classloader.getResourceAsStream(this.pathToDataset+"/"+this.pathToDataset+"_graph.json");
+	        JsonParser parser = new JsonParser();
+			String json = null;
 			
 			try {
+			    int size = is.available();
+			    byte[] buffer = new byte[size];
+			    is.read(buffer);
+			    is.close();
+			    json = new String(buffer, "UTF-8");
+
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			
+			JsonObject jsonObject = parser.parse(json).getAsJsonObject();
+			JsonArray nodes = jsonObject.getAsJsonArray("nodes");
+			JsonArray edges = jsonObject.getAsJsonArray("edges");
+			Map<String, String> id2VertexId = new HashMap<String, String>();
+			Map<String, GTFSVertex> vertexId2Vertex = new HashMap<String, GTFSVertex>();
+			
+			for (JsonElement node : nodes) {
+			    JsonObject nodeObj = node.getAsJsonObject();
+			    
+			    String id = nodeObj.get("id").getAsString();
+			    String vertexId = nodeObj.get("vertexId").getAsString();
+			    id2VertexId.put(id, vertexId);
+			    String name = nodeObj.get("name").getAsString();
+			    String lat = nodeObj.get("lat").getAsString();
+			    String lon = nodeObj.get("lon").getAsString();
+			    
+			    GTFSVertex v = new GTFSVertex(vertexId, name, lat, lon);
+			    
+			    g.addVertex(v);
+			    vertexId2Vertex.put(vertexId, v);
+			}
+			
+			for (JsonElement edge : edges) {
+				JsonObject edgeObj = edge.getAsJsonObject();
 				
-				File graphFile = new File(
-						getClass()
-						.getClassLoader()
-						.getResource(this.pathToDataset+"/"+this.pathToDataset+"_graph.json")
-						.getFile()
+				String source = edgeObj.get("source").getAsString();
+				String target = edgeObj.get("target").getAsString();
+				String distance = edgeObj.get("distance").getAsString();
+				String vertexIdSource = id2VertexId.get(source);
+				String vertexIdTarget = id2VertexId.get(target);
+				
+
+				g.addEdge(
+					vertexId2Vertex.get(vertexIdSource), 
+					vertexId2Vertex.get(vertexIdTarget), 
+					new GTFSEdge(Double.parseDouble(distance))
 				);
 				
-				ji.importGraph(g, graphFile);
-				return g;
 				
-			} catch (NullPointerException e) { // if file not present
-				e.printStackTrace();
-				return null;
 			}
+			
+			return g;
 			
 		}
 		
 		
 		public synchronized Graph<GTFSVertex, GTFSEdge> unserializeRemote() {
-			JSONImporter<GTFSVertex, GTFSEdge> ji = new JSONImporter<GTFSVertex, GTFSEdge>();
+	
 			Graph<GTFSVertex, GTFSEdge> g = new DirectedMultigraph(GTFSEdge.class);
-			
-			//setup the Vertex and Edges BiConsummer
-			ji.addVertexAttributeConsumer((p, attrValue) -> {
-				GTFSVertex v = p.getFirst();
-	            String attrName = p.getSecond();
-	            
-	            if (attrName.equals("vertexId")) {
-	            	v.setVertexId(attrValue.getValue());
-	            } else if (attrName.equals("lat")) {
-	            	v.setLat(Double.parseDouble(attrValue.getValue()));
-	            } else if (attrName.equals("lon")) {
-	            	v.setLon(Double.parseDouble(attrValue.getValue()));
-	            } else if (attrName.equals("name")){
-	            	v.setName(attrValue.getValue());
-	            } else {
-	            	System.out.println("Error while decoding file for vertices : wrong attribute name : "+attrName);
-	            }
-			});
-			
-			ji.addEdgeAttributeConsumer((p, attrValue) -> {
-				GTFSEdge e = p.getFirst();
-	            String attrName = p.getSecond();
-	            
-	            if (attrName.equals("distance")) {
-	            	e.setWeight(Double.parseDouble(attrValue.getValue()));
-	            } else {
-	            	System.out.println("Error while decoding file for edges : wrong attribute name : "+attrName);
-	            }
-			});
-			//
-			
-			//TODO : download the .json file (if it exists) from the GCP as an outputStream Object
-			//then run the GraphImporter and return g
+			JsonParser parser = new JsonParser();
+			String json = null;
+
 			try {
-				
 				//initialize GCP client
 				Storage storage;
 				try {
@@ -371,13 +350,63 @@ public class GraphSerializerBuilder {
 				blob.downloadTo(out, Blob.BlobSourceOption.generationMatch());
 		        InputStream decodedStream = new ByteArrayInputStream(out.toByteArray());
 		        
-		        // import graph and return it.
-				ji.importGraph(g, decodedStream);
-				return g;
+		        try {
+				    int size = decodedStream.available();
+				    byte[] buffer = new byte[size];
+				    decodedStream.read(buffer);
+				    decodedStream.close();
+				    json = new String(buffer, "UTF-8");
+
+				} catch (IOException e) {
+				    e.printStackTrace();
+				}
+				
+				JsonObject jsonObject = parser.parse(json).getAsJsonObject();
+				JsonArray nodes = jsonObject.getAsJsonArray("nodes");
+				JsonArray edges = jsonObject.getAsJsonArray("edges");
+				Map<String, String> id2VertexId = new HashMap<String, String>();
+				Map<String, GTFSVertex> vertexId2Vertex = new HashMap<String, GTFSVertex>();
+				
+				for (JsonElement node : nodes) {
+				    JsonObject nodeObj = node.getAsJsonObject();
+				    
+				    String id = nodeObj.get("id").getAsString();
+				    String vertexId = nodeObj.get("vertexId").getAsString();
+				    id2VertexId.put(id, vertexId);
+				    String name = nodeObj.get("name").getAsString();
+				    String lat = nodeObj.get("lat").getAsString();
+				    String lon = nodeObj.get("lon").getAsString();
+				    
+				    GTFSVertex v = new GTFSVertex(vertexId, name, lat, lon);
+				    
+				    g.addVertex(v);
+				    vertexId2Vertex.put(vertexId, v);
+				}
+				
+				for (JsonElement edge : edges) {
+					JsonObject edgeObj = edge.getAsJsonObject();
+					
+					String source = edgeObj.get("source").getAsString();
+					String target = edgeObj.get("target").getAsString();
+					String distance = edgeObj.get("distance").getAsString();
+					String vertexIdSource = id2VertexId.get(source);
+					String vertexIdTarget = id2VertexId.get(target);
+					
+
+					g.addEdge(
+						vertexId2Vertex.get(vertexIdSource), 
+						vertexId2Vertex.get(vertexIdTarget), 
+						new GTFSEdge(Double.parseDouble(distance))
+					);
+					
+				}
+		        
 			} catch(Exception e) {
 				e.printStackTrace();
 				return null;
 			}
+			
+			return g;
 		}
 		
 		

@@ -5,13 +5,19 @@ package gtfs.corev2;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gtfs.corev2.nio.GTFSGraphBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder.GraphSerializer;
 
 import static org.junit.Assert.*;
 
+import java.io.InputStream;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.jgrapht.Graph;
 
@@ -27,6 +33,7 @@ public class GTFSnioTest {
         System.out.println("The graph has : "+g.vertexSet().size()+" vertices.");
         System.out.println("The graph has : "+g.edgeSet().size()+" edges.");
         
+        /*
         Iterator<GTFSEdge> it = g.edgeSet().iterator();
         for (int i = 0; i < 10; i++) {
         	GTFSEdge e = it.next();
@@ -34,6 +41,7 @@ public class GTFSnioTest {
         		System.out.println("the NaN edge : "+e.toString());
         	}
         }
+        */
         
         //serialization test (local)
         GraphSerializer gs = 
@@ -50,6 +58,27 @@ public class GTFSnioTest {
         //	.build();
         
         //gsRemote.serialize(g);
+        
+        
+        //unserialization test(local)        
+        GraphSerializer gi =
+        	new GraphSerializerBuilder("mbta")
+        	.localSerializer()
+        	.build();
+        
+        Graph<GTFSVertex, GTFSEdge> g3 = gi.unserialize();
+        System.out.println("The unserialized graph3 has : "+g3.vertexSet().size()+" vertices.");
+        System.out.println("The unserialized graph3 has : "+g3.edgeSet().size()+" edges.");
+        
+        //unserialization test(remote)
+        GraphSerializer gir =
+            	new GraphSerializerBuilder("mbta")
+            	.remoteSerializer()
+            	.build();
+            
+        Graph<GTFSVertex, GTFSEdge> g4 = gi.unserialize();
+        System.out.println("The unserialized remote graph has : "+g3.vertexSet().size()+" vertices.");
+        System.out.println("The unserialized remote graph has : "+g3.edgeSet().size()+" edges.");
         
         
     }
