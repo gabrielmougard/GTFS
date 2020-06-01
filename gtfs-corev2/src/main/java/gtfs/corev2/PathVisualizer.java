@@ -50,6 +50,14 @@ public class PathVisualizer extends JFrame {
 		dijkstraFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		dijkstraFrame.setSize(1900, 1000);
 		dijkstraFrame.setVisible(true);
+		
+		/*
+		 * (If you want to see the complete graph) (Quite CPU intensive) 
+		 * 
+		 * 
+		 * MainFrame entireGraph = new MainFrame();
+		 * entireGraph.setVisible(true);
+		 */
         
 
     }
