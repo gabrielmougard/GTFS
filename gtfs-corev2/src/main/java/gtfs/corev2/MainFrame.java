@@ -21,7 +21,7 @@ import gtfs.corev2.nio.Target;
  */
 public class MainFrame extends JFrame {
 
-    private GraphVisualizerV3 graphPanel;
+    private GraphVisualizer graphPanel;
 
     public MainFrame() {
         initComponents();
@@ -37,7 +37,7 @@ public class MainFrame extends JFrame {
         int width = (int) screenSize.getWidth();
         int height = (int) screenSize.getHeight();
 
-        graphPanel = new GraphVisualizerV3("GTFS Graph Visualizer","mbta", Target.LOCAL);
+        graphPanel = new GraphVisualizer("GTFS Graph Visualizer","mbta", Target.LOCAL);
 		graphPanel.setBounds(50, 50, width - 100, height - 240);
 		graphPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(graphPanel);

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class GTFSEdge extends DefaultEdge implements Serializable{
+public class GTFSEdge extends DefaultWeightedEdge implements Serializable{
 
 	private static final long serialVersionUID = 354054054054L;
 	private Double weight;
@@ -16,7 +16,7 @@ public class GTFSEdge extends DefaultEdge implements Serializable{
 	}
 
 	
-	public Double getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 	
