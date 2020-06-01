@@ -19,6 +19,7 @@ public class GraphVisualizer extends JFrame {
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
     private JGraphXAdapter<GTFSVertex, GTFSEdge> jgxAdapter;
     
+    /*
     public static void main(String[] args)
     {
     	
@@ -30,6 +31,7 @@ public class GraphVisualizer extends JFrame {
         
 
     }
+    */
 
     public GraphVisualizer() {
     	Graph<GTFSVertex, GTFSEdge> g = 

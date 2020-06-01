@@ -3,6 +3,7 @@ package gtfs.corev2;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import gtfs.corev2.algorithms.shortestpath.BFS;
 //import gtfs.corev2.algorithms.shortestpath.BFSShortestPath;
 import gtfs.corev2.nio.GTFSGraphBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder;
@@ -20,16 +21,16 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 public class GTFSalgoTest {
 
-	@Ignore
+	
 	@Test
-	public void testBFS_GTFS() {
+	public void testBFS_GTFS() throws Exception {
 		Graph<GTFSVertex, GTFSEdge> g = 
         		new GTFSGraphBuilder("mbta")
         		.localDataset()
         		.build();
 		// lets choose two random vertices for the experiment.
 		Tuple<GTFSVertex, GTFSVertex> travel = randomPair(g);
-		//
+		// jgraphT algo
 		if (travel.first != null && travel.second != null) {
 			System.out.println("starting node : "+travel.first.toString());
 			System.out.println("target node : "+travel.second.toString());
@@ -53,9 +54,31 @@ public class GTFSalgoTest {
 		} else {
 			System.out.println("Random vertex generation failed.");
 		}
+		//custom algo
+		if (travel.first != null && travel.second != null) {
+			System.out.println("starting node : "+travel.first.toString());
+			System.out.println("target node : "+travel.second.toString());
+			System.out.println("");
+			System.out.println("////////////////////////////////////////////////////");
+			System.out.println("///////////// starting BFS algorithm... ////////////");
+			System.out.println("////////////////////////////////////////////////////");
+			List<GTFSVertex> path = new BFS(g, travel.first, travel.second).getPath();
+			
+			if (path.size() > 0) {
+				for (GTFSVertex v : path) {
+					System.out.println(v.toString());
+				}
+				System.out.println("Path found ! Size : "+path.size());
+			} else {
+				System.out.println("No path found !");
+			}
+		} else {
+			System.out.println("Random vertex generation failed.");
+		}
 		
 	}
 	
+	@Ignore
 	@Test
 	public void testDijkstra_GTFS() {
 		Graph<GTFSVertex, GTFSEdge> g = 

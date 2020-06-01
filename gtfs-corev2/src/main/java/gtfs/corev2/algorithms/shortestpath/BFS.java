@@ -7,12 +7,12 @@ import gtfs.corev2.GTFSVertex;
 
 import java.util.*;
 
-public class BFSShortestPath {
+public class BFS {
 	private Graph<GTFSVertex, GTFSEdge> graph;
 	private GTFSVertex src;
 	private GTFSVertex dest;
 	
-	public BFSShortestPath(Graph<GTFSVertex, GTFSEdge> graph, GTFSVertex src, GTFSVertex dest) {
+	public BFS(Graph<GTFSVertex, GTFSEdge> graph, GTFSVertex src, GTFSVertex dest) {
         this.graph = graph;
         this.src = src;
         this.dest = dest;
@@ -93,5 +93,57 @@ public class BFSShortestPath {
 			res.add(toBeAdded);
 		}
 		return res;
+	}
+	
+	public ArrayList<GTFSVertex> doBFSShortestPath() throws Exception {
+		ArrayList<GTFSVertex> shortestPathList = new ArrayList<GTFSVertex>();
+		HashMap<GTFSVertex, Boolean> visited = new HashMap<GTFSVertex, Boolean>();
+		
+		if (this.src == this.dest)
+			return null;
+		Queue<GTFSVertex> queue = new LinkedList<GTFSVertex>();
+		Stack<GTFSVertex> pathStack = new Stack<GTFSVertex>();
+
+		queue.add(this.src);
+		pathStack.add(this.src);
+		visited.put(this.src, true);
+		
+		while(!queue.isEmpty()) {
+			GTFSVertex u = queue.poll();
+
+			Set<GTFSEdge> edges = this.graph.outgoingEdgesOf(u);
+			List<GTFSVertex> neighbors = new ArrayList<GTFSVertex>();
+			for (GTFSEdge e : edges) {
+				neighbors.add(e.getTarget());
+			}
+			for(GTFSVertex v : neighbors) {
+				if(!visited.containsKey(v)) {
+					queue.add(v);
+					visited.put(v, true);
+					pathStack.add(v);
+					if(u == this.dest) {
+						break;
+					}	
+				}
+			}
+		}
+		
+		//find the path
+		GTFSVertex node, currentSrc=this.dest;
+		shortestPathList.add(this.dest);
+		while(!pathStack.isEmpty()) {
+			node = pathStack.pop();
+			if (this.graph.containsEdge(currentSrc, node)) { //if node is a neighbor of currentSrc
+				shortestPathList.add(node);
+				currentSrc = node;
+				if(node == this.src) {
+					break;	
+				}
+			}
+			
+		}
+		
+		
+		return shortestPathList;
 	}
 }
