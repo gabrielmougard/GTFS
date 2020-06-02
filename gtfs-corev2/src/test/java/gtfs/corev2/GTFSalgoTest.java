@@ -3,6 +3,8 @@ package gtfs.corev2;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import gtfs.corev2.algorithms.clustering.ClusteringAlgo.Clustering;
+import gtfs.corev2.algorithms.clustering.KSpanningTreeClustering;
 import gtfs.corev2.algorithms.shortestpath.BFS;
 //import gtfs.corev2.algorithms.shortestpath.BFSShortestPath;
 import gtfs.corev2.nio.GTFSGraphBuilder;
@@ -21,7 +23,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 public class GTFSalgoTest {
 
-	
+	@Ignore
 	@Test
 	public void testBFS_GTFS() throws Exception {
 		Graph<GTFSVertex, GTFSEdge> g = 
@@ -207,5 +209,16 @@ public class GTFSalgoTest {
 		}
 		GTFSVertex end = iter.next();
 		return new Tuple<GTFSVertex, GTFSVertex>(start, end);
+	}
+	
+	@Test
+	public void testGraphClustering() {
+		Graph<GTFSVertex, GTFSEdge> g = 
+        		new GTFSGraphBuilder("mbta")
+        		.localDataset()
+        		.build();
+		KSpanningTreeClustering c = new KSpanningTreeClustering(g, 20);
+		Clustering<GTFSVertex> clusters = c.getClustering();
+		System.out.println(clusters.toString());
 	}
 }

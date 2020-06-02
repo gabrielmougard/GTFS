@@ -8,6 +8,7 @@ import java.util.*;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.WeightedMultigraph;
 
 import gtfs.corev2.*;
 import gtfs.corev2.nio.util.Distance;
@@ -32,7 +33,7 @@ public class GTFSParser {
 	}
 	
 	public Graph<GTFSVertex, GTFSEdge> build() {
-		Graph<GTFSVertex, GTFSEdge> g = new DirectedMultigraph(GTFSEdge.class);
+		Graph<GTFSVertex, GTFSEdge> g = new WeightedMultigraph(GTFSEdge.class);
 		
 		
 		//build the graph

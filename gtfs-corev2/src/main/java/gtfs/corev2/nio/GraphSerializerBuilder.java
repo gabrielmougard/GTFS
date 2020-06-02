@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.WeightedMultigraph;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.json.JSONExporter;
 import org.jgrapht.util.*;
@@ -258,7 +259,7 @@ public class GraphSerializerBuilder {
 		
 		
 		public synchronized Graph<GTFSVertex, GTFSEdge> unserializeLocal() {
-			Graph<GTFSVertex, GTFSEdge> g = new DirectedMultigraph(GTFSEdge.class);
+			Graph<GTFSVertex, GTFSEdge> g = new WeightedMultigraph(GTFSEdge.class);
 			
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 			InputStream is = classloader.getResourceAsStream(this.pathToDataset+"/"+this.pathToDataset+"_graph.json");
