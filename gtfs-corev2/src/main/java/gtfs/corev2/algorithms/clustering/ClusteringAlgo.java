@@ -1,9 +1,14 @@
 package gtfs.corev2.algorithms.clustering;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import gtfs.corev2.GTFSVertex;
+import gtfs.corev2.nio.util.Tuple;
 
 public interface ClusteringAlgo<V> {
 
@@ -31,12 +36,38 @@ public interface ClusteringAlgo<V> {
     
 	    @Override
 	    public int getNumberClusters() {
-	        return clusters.size();
+	        return this.clusters.size();
 	    }
 	
 	    @Override
 	    public List<Set<V>> getClusters() {
-	        return clusters;
+	        return this.clusters;
+	    }
+	    
+	    /*
+	     * Compute the barycentric point (or centroid) of each cluster
+	     */
+	    public Map<Set<V>, Tuple<Double, Double>> getBarycentersMap() {
+	    	Map<Set<V>, Tuple<Double, Double>> barycentersMap = new HashMap<Set<V>, Tuple<Double, Double>>();
+	    	
+	    	for (Set<V> cluster : this.clusters) {
+	    		
+	    		Double clusterBarycenterLat = 0.0;
+	    		Double clusterBarycenterLon = 0.0;
+	    		
+	    		for (V vertex : cluster) {
+	    			GTFSVertex gtfsVertex = (GTFSVertex)vertex;
+	    			clusterBarycenterLat += gtfsVertex.getLat();
+	    			clusterBarycenterLon += gtfsVertex.getLon();
+	    		}
+	    		
+	    		clusterBarycenterLat /= cluster.size();
+	    		clusterBarycenterLon /= cluster.size();
+	    		barycentersMap.put(cluster, new Tuple<Double,Double>(clusterBarycenterLat,clusterBarycenterLon));
+	    	}
+	    	
+	    	
+	    	return barycentersMap;
 	    }
 	
 	    @Override
