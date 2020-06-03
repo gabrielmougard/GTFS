@@ -37,7 +37,7 @@ public class KSpanningTreeClustering implements ClusteringAlgo{
 		SpanningTree<GTFSEdge> mst = new PrimMinimumSpanningTree<>(this.graph).getSpanningTree();
 		
 		/*
-		 * Execute Kruskal algorithm only on MST edges we get k clusters
+		 * Build the clusters using the MST edges
 		 */
 		UnionFind<GTFSVertex> forest = new UnionFind<>(this.graph.vertexSet());
 		ArrayList<GTFSEdge> allEdges = new ArrayList<>(mst.getEdges());
@@ -74,7 +74,7 @@ public class KSpanningTreeClustering implements ClusteringAlgo{
 			cluster.add(v);
 		}
 		
-		return new ClusteringImpl<>(new ArrayList<>(clusterMap.values()));
+		return new ClusteringImpl<>(clusterMap);
 		
 	}
 }
