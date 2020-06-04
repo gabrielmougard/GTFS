@@ -4,6 +4,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import gtfs.corev2.algorithms.clustering.ClusteringAlgo.Clustering;
+import gtfs.corev2.algorithms.clustering.GTFSClusterEdge;
+import gtfs.corev2.algorithms.clustering.GTFSClusterVertex;
 import gtfs.corev2.algorithms.clustering.KSpanningTreeClustering;
 import gtfs.corev2.algorithms.shortestpath.BFS;
 //import gtfs.corev2.algorithms.shortestpath.BFSShortestPath;
@@ -217,8 +219,17 @@ public class GTFSalgoTest {
         		new GTFSGraphBuilder("mbta")
         		.localDataset()
         		.build();
+		
 		KSpanningTreeClustering c = new KSpanningTreeClustering(g, 20);
 		Clustering<GTFSVertex> clusters = c.getClustering();
 		System.out.println(clusters.toString());
+		
+		//convert the clusters in disjoint-sets as a graph 
+		Graph<GTFSClusterVertex, GTFSClusterEdge> gCluster = clusters.convertClustersAsGraph();
+		
+		//check graph information
+		System.out.println("The cluster graph has : "+gCluster.vertexSet().size()+" vertices.");
+        System.out.println("The cluster graph has : "+gCluster.edgeSet().size()+" edges.");
+		
 	}
 }

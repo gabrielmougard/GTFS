@@ -12,6 +12,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.WeightedMultigraph;
 
+import gtfs.corev2.GTFSEdge;
 import gtfs.corev2.GTFSVertex;
 import gtfs.corev2.nio.util.Distance;
 import gtfs.corev2.nio.util.Tuple;
@@ -24,21 +25,25 @@ public interface ClusteringAlgo<V> {
 		int getNumberClusters();
 		
 		List<Set<V>> getClusters();
+		
+		Graph<GTFSClusterVertex, GTFSClusterEdge> convertClustersAsGraph();
 	}
 	
 	class ClusteringImpl<V> implements Clustering<V>, Serializable {
 		
 		private static final long serialVersionUID = -73782410443848101L;
 		private final List<Set<V>> clusters;
+		private final List<GTFSEdge> clusterEdges;
 		private final Map<V, Set<V>> clustersMap;
 
 	    /**
 	     * Construct a new clustering
 	     */
 	    
-	    public ClusteringImpl(Map<V, Set<V>> clustersMap) {
+	    public ClusteringImpl(Map<V, Set<V>> clustersMap, List<GTFSEdge> clusterEdges) {
 	    	this.clustersMap = clustersMap;
 	    	this.clusters = new ArrayList<>(clustersMap.values());
+	    	this.clusterEdges = clusterEdges;
 	    }
     
 	    @Override
@@ -71,6 +76,7 @@ public interface ClusteringAlgo<V> {
 	    	
 	    }
 	    
+	    @Override
 	    public Graph<GTFSClusterVertex, GTFSClusterEdge> convertClustersAsGraph() {
 	    	Graph<GTFSClusterVertex, GTFSClusterEdge> g = new WeightedMultigraph(GTFSClusterEdge.class);
 	    	
@@ -83,35 +89,38 @@ public interface ClusteringAlgo<V> {
 	    		GTFSClusterVertex cv = new GTFSClusterVertex(clusterId, "cluster #"+clusterId, barycenter.first, barycenter.second, (Set<GTFSVertex>)elements);
 	    		g.addVertex(cv);
 	    		clusterVertexMap.put((Set<GTFSVertex>)elements,cv); // for later use when adding edges to graph
+	    		System.out.println("Cluster #"+clusterId+" added");
 	    		clusterId++;
 	    	}
 	    	
 	    	// create the GTFSClusterEdge and add them to g
-	    	for (V key : this.clustersMap.keySet()) {
+	    	for (GTFSEdge e : this.clusterEdges) {
 	    		//the key here is a vertex (in a cluster) linked to a different cluster
 	    		
 	    		//1) find in which cluster the key is
-	    		GTFSClusterVertex keyCluster = null;
-	    		for (Set<V> cluster : this.clustersMap.values()) {
-	    			if (cluster.contains(key)) {
-	    				keyCluster = clusterVertexMap.get((Set<GTFSVertex>)cluster);
-	    				break;
+	    		GTFSVertex source = e.getSource();
+	    		GTFSVertex target = e.getTarget();
+	    		GTFSClusterVertex sourceCluster = null;
+	    		GTFSClusterVertex targetCluster = null;
+	    		
+	    		for (Entry<Set<GTFSVertex>, GTFSClusterVertex> entry : clusterVertexMap.entrySet()) {
+	    			if (entry.getKey().contains(source)) {
+	    				sourceCluster = entry.getValue();
+	    			}
+	    			if (entry.getKey().contains(target)) {
+	    				targetCluster = entry.getValue();
 	    			}
 	    		}
 	    		
-	    		
-	    		//2) find the cluster associated with the key in this.clusterMap
-	    		GTFSClusterVertex targetCluster = clusterVertexMap.get(this.clustersMap.get(key));
-	    		
 	    		//3) Create the edge with the barycentric coordinates of the two GTFSClusterVertex found (use Distance.latlon() for the edge weight)
-	    		if (keyCluster != null) {
+	    		if (sourceCluster != null || targetCluster != null) {
 	    			g.addEdge(
-	    	    		keyCluster, 
+	    	    		sourceCluster, 
 	    	    		targetCluster, 
 	    	    		new GTFSClusterEdge(
 	    	    			Distance.latlon(
-	    	    				keyCluster.getLat(), 
-	    	    				keyCluster.getLon(), 
+	    	    				sourceCluster.getLat(), 
+	    	    				sourceCluster.getLon(), 
 	    	    				targetCluster.getLat(), 
 	    	    				targetCluster.getLon()
 	    	    			)
