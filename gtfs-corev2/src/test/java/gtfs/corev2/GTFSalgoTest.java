@@ -8,20 +8,17 @@ import gtfs.corev2.algorithms.clustering.GTFSClusterEdge;
 import gtfs.corev2.algorithms.clustering.GTFSClusterVertex;
 import gtfs.corev2.algorithms.clustering.KSpanningTreeClustering;
 import gtfs.corev2.algorithms.shortestpath.BFS;
-//import gtfs.corev2.algorithms.shortestpath.BFSShortestPath;
+import gtfs.corev2.algorithms.shortestpath.Dijkstra;
+
 import gtfs.corev2.nio.GTFSGraphBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder;
 import gtfs.corev2.nio.GraphSerializerBuilder.GraphSerializer;
 import gtfs.corev2.nio.util.Tuple;
 
-import static org.junit.Assert.*;
 
 import java.util.*;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.BFSShortestPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 public class GTFSalgoTest {
 
@@ -34,7 +31,8 @@ public class GTFSalgoTest {
         		.build();
 		// lets choose two random vertices for the experiment.
 		Tuple<GTFSVertex, GTFSVertex> travel = randomPair(g);
-		// jgraphT algo
+		
+		
 		if (travel.first != null && travel.second != null) {
 			System.out.println("starting node : "+travel.first.toString());
 			System.out.println("target node : "+travel.second.toString());
@@ -42,9 +40,8 @@ public class GTFSalgoTest {
 			System.out.println("////////////////////////////////////////////////////");
 			System.out.println("///////////// starting BFS algorithm... ////////////");
 			System.out.println("////////////////////////////////////////////////////");
-			//List<GTFSVertex> path = new BFSShortestPath(g, travel.first, travel.second).getPath();
-			BFSShortestPath<GTFSVertex, GTFSEdge> bfs =
-		            new BFSShortestPath<>(g);
+			
+			BFS<GTFSVertex, GTFSEdge> bfs = new BFS<GTFSVertex, GTFSEdge>(g);
 			List<GTFSVertex> path = bfs.getPath(travel.first, travel.second).getVertexList();
 			
 			if (path.size() > 0) {
@@ -55,30 +52,11 @@ public class GTFSalgoTest {
 			} else {
 				System.out.println("No path found !");
 			}
-		} else {
-			System.out.println("Random vertex generation failed.");
-		}
-		//custom algo
-		if (travel.first != null && travel.second != null) {
-			System.out.println("starting node : "+travel.first.toString());
-			System.out.println("target node : "+travel.second.toString());
-			System.out.println("");
-			System.out.println("////////////////////////////////////////////////////");
-			System.out.println("///////////// starting BFS algorithm... ////////////");
-			System.out.println("////////////////////////////////////////////////////");
-			List<GTFSVertex> path = new BFS(g, travel.first, travel.second).getPath();
 			
-			if (path.size() > 0) {
-				for (GTFSVertex v : path) {
-					System.out.println(v.toString());
-				}
-				System.out.println("Path found ! Size : "+path.size());
-			} else {
-				System.out.println("No path found !");
-			}
 		} else {
 			System.out.println("Random vertex generation failed.");
 		}
+		
 		
 	}
 	
@@ -100,8 +78,7 @@ public class GTFSalgoTest {
 			System.out.println("////////////////////////////////////////////////////");
 			System.out.println("///////////// starting DIJKSTRA algorithm... ////////////");
 			System.out.println("////////////////////////////////////////////////////");
-			DijkstraShortestPath<GTFSVertex, GTFSEdge> dijkstra = 
-					new DijkstraShortestPath<>(g);
+			Dijkstra<GTFSVertex, GTFSEdge> dijkstra = new Dijkstra<>(g);
 			List<GTFSVertex> path = dijkstra.getPath(travel.first, travel.second).getVertexList();
 			if (path.size() > 0) {
 				for (GTFSVertex v : path) {
@@ -153,8 +130,8 @@ public class GTFSalgoTest {
 			System.out.println("///////////// starting BFS algorithm... ////////////");
 			System.out.println("////////////////////////////////////////////////////");
 			//List<GTFSVertex> path = new BFSShortestPath(g, travel.first, travel.second).getPath();
-			BFSShortestPath<GTFSVertex, GTFSEdge> bfs =
-		            new BFSShortestPath<>(g);
+			BFS<GTFSVertex, GTFSEdge> bfs =
+		            new BFS<>(g);
 			List<GTFSVertex> path = bfs.getPath(travel.first, travel.second).getVertexList();
 			
 			if (path.size() > 0) {
@@ -177,8 +154,8 @@ public class GTFSalgoTest {
 			System.out.println("///////////// starting BFS algorithm... ////////////");
 			System.out.println("////////////////////////////////////////////////////");
 			//List<GTFSVertex> path = new BFSShortestPath(g, travel.first, travel.second).getPath();
-			BFSShortestPath<GTFSVertex, GTFSEdge> bfs =
-		            new BFSShortestPath<>(g2);
+			BFS<GTFSVertex, GTFSEdge> bfs =
+		            new BFS<>(g2);
 			List<GTFSVertex> path = bfs.getPath(travel.first, travel.second).getVertexList();
 			
 			if (path.size() > 0) {
@@ -213,6 +190,7 @@ public class GTFSalgoTest {
 		return new Tuple<GTFSVertex, GTFSVertex>(start, end);
 	}
 	
+	@Ignore
 	@Test
 	public void testGraphClustering() {
 		Graph<GTFSVertex, GTFSEdge> g = 
