@@ -5,12 +5,11 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.shortestpath.BFSShortestPath;
 
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
+import gtfs.corev2.algorithms.shortestpath.BFS;
 import gtfs.corev2.nio.util.Distance;
 import gtfs.corev2.nio.util.Tuple;
 
@@ -26,8 +25,7 @@ public class BFSFrame extends JFrame{
 			System.out.println("///////////// starting BFS algorithm... ////////////");
 			System.out.println("////////////////////////////////////////////////////");
 			//List<GTFSVertex> path = new BFSShortestPath(g, travel.first, travel.second).getPath();
-			BFSShortestPath<GTFSVertex, GTFSEdge> bfs =
-		            new BFSShortestPath<>(g);
+			BFS<GTFSVertex, GTFSEdge> bfs = new BFS<>(g);
 			List<GTFSVertex> path = bfs.getPath(travel.first, travel.second).getVertexList();
 			
 			if (path.size() > 0) {

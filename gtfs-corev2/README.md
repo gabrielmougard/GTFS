@@ -128,7 +128,52 @@ Graph<GTFSVertex, GTFSEdge> g3 = gs.unserialize();
 
 ## Computing BFS/Dijkstra shortest paths
 
+```java
+import gtfs.corev2.algorithms.shortestpath.BFS;
+import gtfs.corev2.algorithms.shortestpath.Dijkstra;
+
+//BFS
+BFS<GTFSVertex, GTFSEdge> bfs = new BFS<GTFSVertex, GTFSEdge>(g);
+List<GTFSVertex> path = bfs.getPath(<START_GTFS_VERTEX>, <TARGET_GTFS_VERTEX>).getVertexList();
+
+//DIJKSTRA
+Dijkstra<GTFSVertex, GTFSEdge> dijkstra = new Dijkstra<GTFSVertex, GTFSEdge>(g);
+List<GTFSVertex> path = dijkstra.getPath(<START_GTFS_VERTEX>, <TARGET_GTFS_VERTEX>).getVertexList();
+```
+
 go look at `gtfs.corev2.BFSFrame.java` and `gtfs.corev2.DijkstraFrame.java` to see how the shortest paths are computed and shown in Swing JFrames.
+
+## Clustering
+
+If a given graph is too large, maybe it's time to clusterize it ! Here is how it works :
+
+```java
+import org.jgrapht.Graph;
+
+import gtfs.corev2.algorithms.clustering.ClusteringAlgo.Clustering;
+import gtfs.corev2.algorithms.clustering.GTFSClusterEdge;
+import gtfs.corev2.algorithms.clustering.GTFSClusterVertex;
+import gtfs.corev2.algorithms.clustering.KSpanningTreeClustering;
+
+Graph<GTFSVertex, GTFSEdge> g = 
+    new GTFSGraphBuilder("mbta")
+    .localDataset()
+    .build();
+        
+//We want to convert the graph into its 20 most significant clusters.
+//The number of clusters, let's call it k should respect the following condition : 1 <= k <= g.vertexSet().size()
+KSpanningTreeClustering c = new KSpanningTreeClustering(g, 20);
+Clustering<GTFSVertex> clusters = c.getClustering();
+System.out.println(clusters.toString());
+		
+//convert the clusters in disjoint-sets as a graph 
+Graph<GTFSClusterVertex, GTFSClusterEdge> gCluster = clusters.convertClustersAsGraph();
+		
+//check graph information
+System.out.println("The cluster graph has : "+gCluster.vertexSet().size()+" vertices.");
+System.out.println("The cluster graph has : "+gCluster.edgeSet().size()+" edges.");
+```
+
 
 ## Launch the demo
 

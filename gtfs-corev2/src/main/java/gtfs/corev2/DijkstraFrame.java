@@ -5,12 +5,12 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
+import gtfs.corev2.algorithms.shortestpath.Dijkstra;
 import gtfs.corev2.nio.util.Distance;
 import gtfs.corev2.nio.util.Tuple;
 
@@ -26,8 +26,7 @@ public class DijkstraFrame extends JFrame{
 			System.out.println("////////////////////////////////////////////////////");
 			System.out.println("///////////// starting DIJKSTRA algorithm... ////////////");
 			System.out.println("////////////////////////////////////////////////////");
-			DijkstraShortestPath<GTFSVertex, GTFSEdge> dijkstra = 
-					new DijkstraShortestPath<>(g);
+			Dijkstra<GTFSVertex, GTFSEdge> dijkstra = new Dijkstra<GTFSVertex, GTFSEdge>(g);
 			List<GTFSVertex> path = dijkstra.getPath(travel.first, travel.second).getVertexList();
 			if (path.size() > 0) {
 				System.out.println("Path found ! Size : "+path.size());
