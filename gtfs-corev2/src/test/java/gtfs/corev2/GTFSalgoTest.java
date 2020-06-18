@@ -22,7 +22,6 @@ import org.jgrapht.Graph;
 
 public class GTFSalgoTest {
 
-	@Ignore
 	@Test
 	public void testBFS_GTFS() throws Exception {
 		Graph<GTFSVertex, GTFSEdge> g = 
@@ -60,7 +59,7 @@ public class GTFSalgoTest {
 		
 	}
 	
-	@Ignore
+
 	@Test
 	public void testDijkstra_GTFS() {
 		Graph<GTFSVertex, GTFSEdge> g = 
